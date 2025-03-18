@@ -7,13 +7,13 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import openai
+from google import genai
+
+# Define the API model 
+
+client = genai.Client(api_key="AIzaSyAkXyGaJGcBM8mWjzsRiHcv2xTUUtiauvI")
 
 load_dotenv()
-
-# Configure OpenAI API
-openai.api_key = os.getenv("OPENAI_API_KEY", "")
-openai.api_base = os.getenv("OPENAI_ENDPOINT", "")
 
 app = FastAPI(title="Docmint API")
 
@@ -26,15 +26,6 @@ class GenerateReadmeRequest(BaseModel):
 def generate_cache_key(projectType: str, projectFiles: list[str], fullCode: str) -> str:
     combined = projectType + "".join(projectFiles) + fullCode
     return f"readme:{hashlib.sha256(combined.encode('utf-8')).hexdigest()}"
-
-@app.post("/generate-readme")
-async def generate_readme(request: Request):
-    body = await request.json()
-    try:
-        req_data = GenerateReadmeRequest(**body)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="Missing required fields in request body")
-
 
 @app.post("/generate-readme")
 async def generate_readme(request: Request):
@@ -106,11 +97,10 @@ Generate the README.md content directly, ready to use as-is.
     }
     user_message = {"role": "user", "content": prompt}
 
-    async def openai_stream_generator():
-        response = await openai.ChatCompletion.acreate(
-            model=os.getenv("MODEL_NAME", "gpt-3.5-turbo"),
-            messages=[system_message, user_message],
-            stream=True
+    async def gemini_stream_generator():
+        response = await client.models.generate_content_stream(
+            model='gemini-2.0-flash',
+            contents=[system_message, user_message],
         )
         async for chunk in response:
             delta = chunk.choices[0].delta
@@ -118,4 +108,4 @@ Generate the README.md content directly, ready to use as-is.
             if text:
                 yield f"data: {text}\n\n"
 
-    return StreamingResponse(openai_stream_generator(), media_type="text/event-stream")
+    return StreamingResponse(gemini_stream_generator(), media_type="text/event-stream")
