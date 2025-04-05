@@ -122,7 +122,7 @@ def generate_from_files(request):
 
             3. **Additional Requirements**:
             - Always include this badge at the bottom:
-            [![Built with DocMint](https://img.shields.io/badge/Built%20with-Dokugen-brightgreen)](https://github.com/kingsleyesisi/DocMint)
+            [![Built with DocMint](https://img.shields.io/badge/Generated%20by-DocMint-red)](https://github.com/kingsleyesisi/DocMint)
             - The README must **sound human-written**. Avoid boilerplate phrases.
             - Do **not** wrap the README in markdown code block markers.
 
