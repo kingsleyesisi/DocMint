@@ -40,22 +40,32 @@ def index(request):
     else:
         return JsonResponse({"error": "Only POST method is allowed"}, status=405)
 
+
 @csrf_exempt
-def generate_from_file(request):
+def generate_from_files(request):
     if request.method == "POST":
         try:
-            if 'file' not in request.FILES:
-                return JsonResponse({"error": "File is required"}, status=400)
+            if 'files' not in request.FILES:
+                return JsonResponse({"error": "Files are required"}, status=400)
             
-            file = request.FILES['file']
-            content = file.read().decode('utf-8')
+            files = request.FILES.getlist('files')
+            if not files:
+                return JsonResponse({"error": "No files provided"}, status=400)
             
-            if not content.strip():
-                return JsonResponse({"error": "File content is empty"}, status=400)
+            combined_content = ""
+            for file in files:
+                content = file.read().decode('utf-8')
+                if not content.strip():
+                    return JsonResponse({"error": f"File {file.name} content is empty"}, status=400)
+                
+                combined_content += content + "\n"  # Combine all file contents
             
-            result = generate_readme(content)
-            return JsonResponse(result)
+            # Generate a single response for the combined content
+            result = generate_readme(combined_content)
+            
+            return JsonResponse({"result": result})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
     else:
         return JsonResponse({"error": "Only POST method is allowed"}, status=405)
+    
