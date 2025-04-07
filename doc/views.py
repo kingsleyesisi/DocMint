@@ -94,6 +94,8 @@ def generate_from_files(request):
 
 
 
+            contribution = request.POST.get('contribution', 'true').lower() == 'true'
+
             prompt = f"""
             Generate a **high-quality, professional, and modern README.md** for a **{project_type}** project.
 
@@ -109,11 +111,11 @@ def generate_from_files(request):
             1. **Analyze the project** and determine what sections are needed. Include the following sections if applicable:
             - **Title**: A clear and concise title for the project.
             - **Description**: A brief but engaging description of the project.
-            - **Installation**: Step-by-step instructions for setting up the project locally.
-            - **Usage**: Clear instructions on how to use the project.
+            - **Installation**: Step-by-step instructions for setting up the project.
+            - **Usage**: Clear instructions on how to use the project (if the project is an api project make instructions on how to use the API).
             - **Features**: A list of key features.
             - **Technologies Used**: List of technologies, frameworks, and tools.
-            - **Contributing**: Guidelines for contributing.
+            {"- **Contributing**: Guidelines for contributing" if contribution else ""}
             - **License**: Information about the project's license.
 
             2. **Tone and Style**:
