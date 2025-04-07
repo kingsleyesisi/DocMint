@@ -97,7 +97,7 @@ def generate_from_files(request):
             contribution = request.POST.get('contribution', 'true').lower() == 'true'
 
             prompt = f"""
-            Generate a **high-quality, professional, and modern README.md** for a **{project_type}** project.
+            Generate a **high-quality, professional, and modern README.md/Project documentation** for a **{project_type}** project.
 
             ## Project Overview:
             The project includes the following files:
@@ -115,6 +115,7 @@ def generate_from_files(request):
             - **Usage**: Clear instructions on how to use the project (if the project is an api project make instructions on how to use the API).
             - **Features**: A list of key features.
             - **Technologies Used**: List of technologies, frameworks, and tools.
+            
             {"- **Contributing**: Guidelines for contributing" if contribution else ""}
             - **License**: Information about the project's license.
 
