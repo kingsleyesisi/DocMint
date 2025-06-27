@@ -131,3 +131,79 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Add these to your Django settings.py file
+
+
+# Gemini AI Configuration
+
+# File Upload Settings
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024  # 10MB
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+
+CORS_ALLOW_ALL_ORIGINS = True  # Only for development
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'docmint.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'docmint': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+# Rate Limiting (if using django-ratelimit)
+RATELIMIT_ENABLE = True
+RATELIMIT_USE_CACHE = 'default'
+
+
+# Security Settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# DocMint Specific Settings
+DOCMINT_SETTINGS = {
+    'MAX_FILES_PER_REQUEST': 20,
+    'MAX_FILE_SIZE_MB': 1,
+    'SUPPORTED_EXTENSIONS': [
+        '.py', '.js', '.ts', '.jsx', '.tsx', '.java', '.cpp', '.c', '.cs',
+        '.php', '.rb', '.go', '.rs', '.swift', '.kt', '.scala', '.html',
+        '.css', '.scss', '.sass', '.vue', '.json', '.xml', '.yaml', '.yml',
+        '.md', '.txt', '.toml', '.ini', '.cfg', '.conf'
+    ],
+    'DEFAULT_PROJECT_TYPES': [
+        'Python', 'JavaScript', 'TypeScript', 'Node.js', 'React', 'Vue.js',
+        'Java', 'Spring Boot', 'C++', 'C#/.NET', 'PHP', 'Ruby', 'Go',
+        'Rust', 'Swift', 'Kotlin', 'Web Development', 'API', 'Mobile App',
+        'Machine Learning', 'Data Science', 'DevOps', 'General Software'
+    ]
+}

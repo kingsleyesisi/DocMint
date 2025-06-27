@@ -1,5 +1,8 @@
-# DocMint CLI: Your Professional README Generator ✨
+# DocMint CLI: Your Professional README Generator 🚀
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/kingsleyesisi/DocMint/main/assets/docmint_logo.png" alt="DocMint CLI Logo" width="200"/>
+</p>
 
 DocMint CLI is a command-line tool designed to effortlessly generate professional README files for your projects. Compatible across Windows, macOS, and Linux, DocMint CLI analyzes your project and crafts a comprehensive README, saving you time and ensuring your projects are well-documented.
 
@@ -36,25 +39,23 @@ DocMint CLI is a command-line tool designed to effortlessly generate professiona
 - **pathlib**: For working with file paths.
 - **mimetypes**: For determining file types.
 - **colorama**: For color support in Windows terminals.
-- **FastAPI**: Used in the backend for creating API endpoints.
-- **Uvicorn**: ASGI server for running the FastAPI backend.
-- **Google Gemini AI**: Powers the AI-driven README generation.
-- **Django**: Used for the backend server to manage API requests and project analysis.
 
 [![Python](https://img.shields.io/badge/Python-3.6+-blue.svg?style=flat-square)](https://www.python.org/)
 [![requests](https://img.shields.io/badge/requests-2.25.1-brightgreen.svg?style=flat-square)](https://docs.python-requests.org/en/master/)
 [![argparse](https://img.shields.io/badge/argparse-blueviolet.svg?style=flat-square)](https://docs.python.org/3/library/argparse.html)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.11-blue)](https://fastapi.tiangolo.com/)
-[![Uvicorn](https://img.shields.io/badge/Uvicorn-0.34.0-green)](https://www.uvicorn.org/)
-[![Django](https://img.shields.io/badge/Django-5.1.7-brightgreen)](https://www.djangoproject.com/)
 
 ## Installation ⬇️
 
 1. **Prerequisites**:
-   - Python 3.9 or higher.
+   - Python 3.6 or higher.
    - `pip` package installer.
 
-2. **Clone the Repository**:
+2. **Install DocMint CLI**:
+   ```bash
+   pip install requests
+   ```
+
+3. **Clone the Repository**:
    Clone the DocMint CLI repository from GitHub:
 
    ```bash
@@ -62,13 +63,13 @@ DocMint CLI is a command-line tool designed to effortlessly generate professiona
    cd docmint_cli
    ```
 
-3. **Install Dependencies**:
-   Set up a virtual environment (recommended):
+4. **Install Dependencies**:\
+   Optionally, set up a virtual environment:
 
    ```bash
    python3 -m venv venv
-   source venv/bin/activate  # On Windows use `venv\\Scripts\\activate`
-   pip install -r requirements.txt
+   source venv/bin/activate # On Windows use `venv\Scripts\activate`
+   pip install -r requirements.txt # if you have a requirements.txt
    ```
 
 ## Usage 💻
@@ -143,7 +144,7 @@ The default configuration is as follows:
 
 ```json
 {
-    "backend_url": "http://127.0.0.1:8000",
+    "backend_url": "https://your-django-backend.com",
     "default_project_type": "auto",
     "include_contributing": true,
     "max_file_size": 1048576,
@@ -205,23 +206,9 @@ The default configuration is as follows:
 
 ### Modifying Configuration
 
-You can modify the configuration file to suit your needs. For example, to change the backend URL, edit the `backend_url` field in the `config.json` file.  You can use the following to view and modify the configuration:
+You can modify the configuration file to suit your needs. For example, to change the backend URL, edit the `backend_url` field in the `config.json` file.
 
-```python
-from docmint_cli import config
-
-# Get the current configuration
-current_config = config.get_config()
-print(current_config)
-
-# Modify a configuration setting
-current_config['backend_url'] = 'https://your-new-backend.com'
-
-# Save the updated configuration
-config.save_config(current_config)
-```
-
-## API Documentation 📚
+## API Documentation 📖
 
 The DocMint CLI interacts with a backend server to generate README files. Below are the API endpoints used by the CLI:
 
@@ -269,7 +256,7 @@ The DocMint CLI interacts with a backend server to generate README files. Below 
 ```python
 import requests
 
-url = "http://localhost:8000/api/generate-from-files/"
+url = "https://your-django-backend.com/api/generate-from-files/"
 files = [
     ('files', ('file1.py', open('file1.py', 'rb'), 'text/plain')),
     ('files', ('file2.js', open('file2.js', 'rb'), 'text/javascript'))
@@ -305,12 +292,12 @@ Deployment instructions will vary depending on the nature of your project. Here 
 
 We welcome contributions to DocMint CLI! Please follow these guidelines:
 
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Write tests for your changes.
-4. Submit a pull request.
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix.
+3.  Write tests for your changes.
+4.  Submit a pull request.
 
-## License 📜
+## License 📄
 
 This project is licensed under the [MIT License](LICENSE).
 
@@ -327,38 +314,21 @@ If you encounter connection issues with the DocMint backend, check the following
 
 - Verify your internet connection.
 - Ensure the backend URL is correct.
-- Confirm that the DocMint backend is running (default `http://127.0.0.1:8000`).
+- Confirm that the DocMint backend is running.
 
 ### File Encoding Errors
 
 If you encounter errors related to file encoding, try the following:
 
 - Ensure your files are encoded in UTF-8.
+- Use the `--encoding` option to specify the file encoding.
 
 ### Large Project Issues
 
 If you are working with a large project and encounter performance issues, try the following:
 
 - Exclude unnecessary directories and files from analysis.
-- Increase the timeout value for API requests (though this may indicate an issue with the backend).
-
-### Backend Setup
-
-Ensure the backend server is correctly set up and running. Refer to the backend project's documentation for setup instructions, which may include:
-
-1.  Installing dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-2.  Configuring environment variables (e.g., `DJANGO_SECRET_KEY`, `GEMINI_API`).
-3.  Running database migrations:
-    ```bash
-    python manage.py migrate
-    ```
-4.  Starting the server:
-    ```bash
-    python manage.py runserver
-    ```
+- Increase the timeout value for API requests.
 
 ---
 
