@@ -7,18 +7,28 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 # Read requirements properly
 def read_requirements():
-    with open("requirements.txt", "r", encoding="utf-8") as fh:
-        requirements = []
-        for line in fh:
-            line = line.strip()
-            # Skip empty lines and comments
-            if line and not line.startswith("#"):
-                requirements.append(line)
-    return requirements
+    try:
+        with open("requirements.txt", "r", encoding="utf-8") as fh:
+            requirements = []
+            for line in fh:
+                line = line.strip()
+                # Skip empty lines and comments
+                if line and not line.startswith("#"):
+                    requirements.append(line)
+        return requirements
+    
+    except FileNotFoundError:
+        # Fallback to hardcoded requirements if file not found
+        return [
+            "click>=8.2.0",
+            "requests>=2.32.0",
+            "rich>=13.9.0",
+            "typer>=0.15.0"
+        ]
 
 setup(
     name="docmint",
-    version="0.1.1",
+    version="0.1.3",  # Increment version for new release
     author="Kingsley Esisi",
     author_email="kingsleyesisi@yahoo.com",
     description="DocMint: A professional tool for generating comprehensive README and documentation files effortlessly.",
@@ -33,7 +43,6 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Documentation",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
@@ -42,13 +51,7 @@ setup(
         "Programming Language :: Python :: 3.13",
     ],
     python_requires=">=3.8",
-    install_requires=[
-        "click>=8.2.0",
-        "pydantic>=2.10.0", 
-        "requests>=2.32.0",
-        "rich>=13.9.0",
-        "typer>=0.15.0"
-    ],
+    install_requires=read_requirements(),  # NOW using the function!
     entry_points={
         "console_scripts": [
             "docmint=docmint.cli:main",  # This creates the CLI command
