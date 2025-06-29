@@ -39,7 +39,7 @@ SYSTEM_MESSAGE = {
         "5. Include relevant badges, emojis, and modern formatting for better visual appeal.\n"
         "6. If it's an API project, provide clear API documentation with example requests/responses.\n"
         "7. Always include a table of contents for longer READMEs.\n"
-        "8. Add troubleshooting section for complex projects."
+        "8. Add troubleshooting section for complex projects. (note for complex projects only)"
     )
 }
 
@@ -241,7 +241,15 @@ def generate_from_files(request):
         if 'files' not in request.FILES:
             return Response({
                 "error": "Files are required",
-                "supported_formats": [".py", ".js", ".ts", ".java", ".cpp", ".html", ".css", ".json", ".md", ".txt"]
+                "supported_formats": [
+                        ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".cpp", ".c", ".cs",
+                        ".php", ".rb", ".go", ".rs", ".swift", ".kt", ".scala", ".html",
+                        ".css", ".scss", ".sass", ".less", ".vue", ".svelte", ".md", ".txt",
+                        ".json", ".xml", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".sh", 
+                        ".bash", ".zsh", ".ps1", ".psm1", ".sql", ".pl", ".pyx", ".r", ".dart",
+                        ".lua", ".groovy", ".kotlin", ".h", ".hpp", ".cxx", ".m", ".t", ".swift", 
+                        ".pl", ".pm",
+                    ]
             }, status=status.HTTP_400_BAD_REQUEST)
         
         files = request.FILES.getlist('files')
@@ -398,18 +406,21 @@ def get_supported_formats(request):
     """Get list of supported file formats and project types"""
     return Response({
         "supported_file_extensions": [
-            ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".cpp", ".c", ".cs",
-            ".php", ".rb", ".go", ".rs", ".swift", ".kt", ".scala", ".html",
-            ".css", ".scss", ".sass", ".vue", ".json", ".xml", ".yaml", ".yml",
-            ".md", ".txt", ".toml", ".ini", ".cfg", ".conf"
-        ],
+        ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".cpp", ".c", ".cs",
+        ".php", ".rb", ".go", ".rs", ".swift", ".kt", ".scala", ".html",
+        ".css", ".scss", ".sass", ".less", ".vue", ".svelte", ".md", ".txt",
+        ".json", ".xml", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".sh", 
+        ".bash", ".zsh", ".ps1", ".psm1", ".sql", ".pl", ".pyx", ".r", ".dart",
+        ".lua", ".groovy", ".kotlin", ".h", ".hpp", ".cxx", ".m", ".t", ".swift", 
+        ".pl", ".pm",
+    ],
         "supported_project_types": [
             "Python", "JavaScript", "TypeScript", "Node.js", "React", "Vue.js",
             "Java", "Spring Boot", "C++", "C#/.NET", "PHP", "Ruby", "Go",
             "Rust", "Swift", "Kotlin", "Web Development", "API", "Mobile App",
             "Machine Learning", "Data Science", "DevOps", "General Software"
         ],
-        "max_file_size_mb": 1,
+        "max_file_size_mb": 10,
         "max_files_per_request": 20
     }, status=status.HTTP_200_OK)
 
