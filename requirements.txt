@@ -1,0 +1,12 @@
+# DocMint CLI Requirements
+click>=8.2.0
+pydantic>=2.10.0
+requests>=2.32.0
+rich>=13.9.0
+typer>=0.15.0
+
+rich-toolkit>=0.14.0  # Only if you explicitly use this
+
+# Development/build tools (not needed for end users)
+# setuptools>=70.0.0    # Build tool, not runtime dependency
+# pyproject_hooks>=1.2.0  # Build tool, not runtime dependency
