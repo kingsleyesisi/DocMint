@@ -151,7 +151,7 @@ def generate_readme_content(prompt, files_data=None, project_stats=None):
         
         user_message = {"role": "user", "content": enhanced_prompt}
         
-        response = client.models.generate_content(
+        response = client.models.generate_content_stream(
             model="gemini-2.0-flash-exp",
             contents=[json.dumps(SYSTEM_MESSAGE), json.dumps(user_message)]
         )
