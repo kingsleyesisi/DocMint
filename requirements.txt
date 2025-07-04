@@ -1,12 +1,27 @@
-# DocMint CLI Requirements
-click>=8.2.0
-pydantic>=2.10.0
-requests>=2.32.0
-rich>=13.9.0
-typer>=0.15.0
+# 🌟 DocMint CLI Requirements
+# Professional README & Documentation Generator
 
-rich-toolkit>=0.14.0  # Only if you explicitly use this
+# Core dependencies for CLI functionality
+click>=8.2.0              # Command-line interface framework
+requests>=2.32.0          # HTTP library for API communication  
+rich>=13.9.0              # Rich text and beautiful formatting
+typer>=0.15.0             # Modern CLI framework built on Click
 
-# Development/build tools (not needed for end users)
-# setuptools>=70.0.0    # Build tool, not runtime dependency
-# pyproject_hooks>=1.2.0  # Build tool, not runtime dependency
+# Additional utilities
+pydantic>=2.10.0          # Data validation and settings management
+
+# Optional dependencies for enhanced functionality
+colorama>=0.4.6           # Cross-platform colored terminal text (Windows support)
+
+# Development and build tools (commented out for end users)
+# These are only needed for development and building the package
+# setuptools>=70.0.0      # Build tool, not runtime dependency
+# wheel>=0.41.0           # Build tool for creating wheels
+# twine>=4.0.0            # Tool for uploading packages to PyPI
+# build>=0.10.0           # Modern Python build frontend
+
+# Testing dependencies (commented out for end users)
+# pytest>=7.0.0           # Testing framework
+# pytest-cov>=4.0.0      # Coverage plugin for pytest
+# black>=23.0.0           # Code formatter
+# flake8>=6.0.0           # Linting tool

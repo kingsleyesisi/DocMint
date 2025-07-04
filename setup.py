@@ -28,20 +28,30 @@ def read_requirements():
 
 setup(
     name="docmint",
-    version="0.1.3",  # Increment version for new release
+    version="0.2.0",  # Updated version for new release
     author="Kingsley Esisi",
     author_email="kingsleyesisi@yahoo.com",
-    description="DocMint: A professional tool for generating comprehensive README and documentation files effortlessly.",
+    description="🌟 DocMint: Professional README & Documentation Generator - Transform your projects into professionally documented masterpieces with AI-powered README generation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/kingsleyesisi/docmint",
+    project_urls={
+        "Bug Reports": "https://github.com/kingsleyesisi/docmint/issues",
+        "Source": "https://github.com/kingsleyesisi/docmint",
+        "Documentation": "https://github.com/kingsleyesisi/docmint#readme",
+        "Changelog": "https://github.com/kingsleyesisi/docmint/releases",
+    },
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
+        "Topic :: Software Development :: Documentation",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Text Processing :: Markup :: Markdown",
+        "Topic :: Utilities",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Topic :: Software Development :: Documentation",
+        "Environment :: Console",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -49,9 +59,11 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3 :: Only",
     ],
+    keywords="readme documentation generator markdown cli tool python package ai-powered",
     python_requires=">=3.8",
-    install_requires=read_requirements(),  # NOW using the function!
+    install_requires=read_requirements(),
     entry_points={
         "console_scripts": [
             "docmint=docmint.cli:main",  # This creates the CLI command
@@ -59,4 +71,11 @@ setup(
     },
     include_package_data=True,
     zip_safe=False,
+    # Additional metadata for better discoverability
+    platforms=["any"],
+    license="MIT",
+    # Package data
+    package_data={
+        "docmint": ["*.md", "*.txt"],
+    },
 )

@@ -1,144 +1,157 @@
-# DocMint CLI: Your Professional README Generator ✨
+<div align="center">
 
-Hey there! 👋 DocMint CLI is your go-to command-line tool for generating professional README files without breaking a sweat. Whether you're on Windows, macOS, or Linux, this tool has got you covered. It dives deep into your project, figures out what it's all about, and whips up a comprehensive README.md file that'll make your project shine. ✨
+# 🌟 DocMint
 
-## Table of Contents
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [API Documentation](#api-documentation)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-- [Troubleshooting](#troubleshooting)
+### *Professional README & Documentation Generator*
 
-## Features ✨
+[![PyPI version](https://badge.fury.io/py/docmint.svg)](https://badge.fury.io/py/docmint)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg?style=flat-square&logo=python)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Downloads](https://pepy.tech/badge/docmint)](https://pepy.tech/project/docmint)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 
-- **Automated README Generation**: Say goodbye to README-writing headaches! DocMint CLI analyzes your project files and generates a detailed README in minutes. 🚀
-- **Project Type Detection**: It's like magic! DocMint automatically detects your project type (Python, JavaScript, Java, you name it!). 🧙‍♀️
-- **Customizable**: Need a README with a specific focus? Use custom prompts and project types to tailor the output. 🎨
-- **Configuration**: Tweak the tool to fit your needs. Configure the backend URL, excluded directories, and more. ⚙️
-- **Cross-Platform**: Works seamlessly on Windows, macOS, and Linux. No compatibility nightmares! 💻
-- **Contributing Guidelines**: Easily include or exclude a contributing section to encourage community involvement. 🤝
-- **Network Check**: Always know if you're connected to the DocMint backend. 🌐
-- **File Analysis**: Scans and processes project files, providing a summary of analyzed files. 🔍
-- **Colorized Output**: Enjoy informative and visually appealing terminal output. Makes everything easier on the eyes! 🌈
+*Transform your projects into professionally documented masterpieces with AI-powered README generation* ✨
 
-## Technologies Used 🛠️
+[🚀 **Quick Start**](#installation) • [📖 **Documentation**](#usage) • [🎯 **Features**](#features) • [🤝 **Contributing**](#contributing)
 
-- **Python**: The heart and soul of DocMint CLI. 🐍
-- **requests**: Making HTTP requests to the DocMint backend like a pro. 🌐
-- **argparse**: Parsing command-line arguments so you can customize your experience. ⚙️
-- **pathlib**: Handling file paths with grace and ease. 🗂️
-- **mimetypes**: Determining file types to better understand your project. 📄
-- **colorama**: Adding color support in Windows terminals. 🎨
+---
 
-[![Python](https://img.shields.io/badge/Python-3.6+-blue.svg?style=flat-square)](https://www.python.org/)
-[![requests](https://img.shields.io/badge/requests-2.25.1-brightgreen.svg?style=flat-square)](https://docs.python-requests.org/en/master/)
-[![argparse](https://img.shields.io/badge/argparse-blueviolet.svg?style=flat-square)](https://docs.python.org/3/library/argparse.html)
+</div>
 
-## Installation ⬇️
+## 🎯 What is DocMint?
 
-1. **Prerequisites**:
-   - Python 3.6 or higher (because who doesn't love the latest features?).
-   - `pip` package installer (your best friend for Python packages).
+**DocMint** is a powerful Python package that automatically generates comprehensive, professional README files for your projects. Simply point it at your codebase, and watch as it analyzes your files, understands your project structure, and creates beautiful documentation that makes your project shine.
 
-2. **Install DocMint CLI**:
-   First, make sure you have `requests` installed:
+> 💡 **Perfect for developers who want professional documentation without the hassle!**
 
-   ```bash
-   pip install requests
-   ```
+### ✨ Key Highlights
 
-3. **Clone the Repository**:
-   Grab the DocMint CLI repository from GitHub:
+🔍 **Smart Analysis** - Automatically detects project type and structure  
+🎨 **Beautiful Output** - Generates professional, well-formatted README files  
+🌍 **Cross-Platform** - Works seamlessly on Windows, macOS, and Linux  
+⚡ **Lightning Fast** - Generate comprehensive docs in seconds  
+🛠️ **Highly Configurable** - Customize output to match your needs  
 
-   ```bash
-   git clone <repository_url>
-   cd docmint_cli
-   ```
+---
 
-4. **Install Dependencies**:
-   (Optional, but highly recommended) Set up a virtual environment to keep your project dependencies tidy:
+## 🚀 Installation
 
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows, use `venv\\Scripts\\activate`
-   pip install -r requirements.txt  # If you have a requirements.txt
-   ```
-
-## Usage 💻
-
-### Basic Usage
-
-To generate a README for your project in the current directory, just run:
+### Install from PyPI (Recommended)
 
 ```bash
-python cli.py
+pip install docmint
 ```
 
-### Specifying a Directory
-
-Want to analyze a specific directory? Use the `-d` or `--directory` option:
+### Install from Source
 
 ```bash
-python cli.py -d /path/to/your/project
+git clone https://github.com/kingsleyesisi/docmint.git
+cd docmint
+pip install -e .
 ```
 
-### Using a Text Prompt
-
-Generate a README from a text prompt with the `-p` or `--prompt` option:
+### Verify Installation
 
 ```bash
-python cli.py -p "My awesome project is a web application built with Flask and React."
+docmint --help
 ```
 
-### Specifying Project Type and Output File
+---
 
-Specify the project type and output file name using the `-t` or `--type` and `-o` or `--output` options:
+## 💻 Usage
+
+### 🎯 Quick Start
+
+Generate a README for your current project:
 
 ```bash
-python cli.py -t Python -o MyREADME.md
+docmint
 ```
 
-### Excluding Contributing Section
-
-Skip the contributing section with the `--no-contributing` option:
+### 📁 Analyze Specific Directory
 
 ```bash
-python cli.py --no-contributing
+docmint -d /path/to/your/project
 ```
 
-### Using a Custom Backend URL
-
-For those who like to tinker, use a custom backend URL with the `--url` option:
+### 💬 Generate from Description
 
 ```bash
-python cli.py --url http://localhost:8000
+docmint -p "My awesome web application built with Flask and React"
 ```
 
-### Skipping the Banner
-
-Skip the fancy banner display with the `--no-banner` option:
+### 🎨 Advanced Usage
 
 ```bash
-python cli.py --no-banner
+# Specify project type and output file
+docmint -t Python -o MyAwesome-README.md
+
+# Skip contributing section
+docmint --no-contributing
+
+# Use custom backend
+docmint --url http://localhost:8000
+
+# Silent mode (no banner)
+docmint --no-banner
 ```
 
-## Configuration ⚙️
+---
 
-DocMint CLI uses a configuration file to store settings like the backend URL and excluded directories.
+## 🛠️ Command Line Options
 
-### Configuration File
+| Option | Short | Description | Example |
+|--------|-------|-------------|---------|
+| `--directory` | `-d` | Project directory to analyze | `-d ./my-project` |
+| `--prompt` | `-p` | Generate from text description | `-p "Flask API server"` |
+| `--type` | `-t` | Specify project type | `-t Python` |
+| `--output` | `-o` | Output filename | `-o DOCUMENTATION.md` |
+| `--no-contributing` | | Skip contributing section | `--no-contributing` |
+| `--url` | | Custom backend URL | `--url http://localhost:8000` |
+| `--no-banner` | | Skip banner display | `--no-banner` |
+| `--help` | `-h` | Show help message | `--help` |
 
-The configuration file is located at `~/.docmint/config.json`.
+---
 
-### Default Configuration
+## 🎨 Features
 
-Here’s what the default configuration looks like:
+<div align="center">
+
+| Feature | Description |
+|---------|-------------|
+| 🤖 **AI-Powered Analysis** | Intelligent project understanding and documentation generation |
+| 🔍 **Smart Detection** | Automatically identifies project type, dependencies, and structure |
+| 📝 **Professional Templates** | Beautiful, industry-standard README formats |
+| 🌈 **Colorful CLI** | Rich terminal output with progress indicators and status updates |
+| ⚙️ **Configurable** | Extensive configuration options for customized output |
+| 🔗 **API Integration** | Seamless integration with DocMint cloud services |
+| 📊 **File Analysis** | Comprehensive project file scanning and summarization |
+| 🛡️ **Error Handling** | Robust error handling with helpful diagnostic messages |
+
+</div>
+
+### 🎯 Supported Project Types
+
+- 🐍 **Python** (Django, Flask, FastAPI, etc.)
+- 🟨 **JavaScript/TypeScript** (Node.js, React, Vue, Angular)
+- ☕ **Java** (Spring, Maven, Gradle)
+- 🦀 **Rust** (Cargo projects)
+- 🐹 **Go** (Go modules)
+- 💎 **Ruby** (Rails, Gems)
+- 🐘 **PHP** (Laravel, Composer)
+- ⚡ **C/C++** (CMake, Make)
+- 🔷 **C#/.NET** (MSBuild projects)
+- 🍃 **Swift** (Xcode projects)
+- 🎯 **Kotlin** (Android, JVM)
+- 🌐 **Web Development** (HTML, CSS, JavaScript)
+
+---
+
+## ⚙️ Configuration
+
+DocMint uses a configuration file located at `~/.docmint/config.json` for persistent settings.
+
+### 📋 Default Configuration
 
 ```json
 {
@@ -148,207 +161,197 @@ Here’s what the default configuration looks like:
     "max_file_size": 104857600,
     "max_files": 150,
     "excluded_dirs": [
-        "node_modules",
-        ".git",
-        "__pycache__",
-        ".pytest_cache",
-        "venv",
-        "env",
-        ".env",
-        "dist",
-        "build",
-        ".next",
-        "target",
-        "bin",
-        "obj",
-        ".gradle",
-        "vendor"
+        "node_modules", ".git", "__pycache__", 
+        "venv", "dist", "build", ".next"
     ],
     "supported_extensions": [
-        ".py",
-        ".js",
-        ".ts",
-        ".jsx",
-        ".tsx",
-        ".java",
-        ".cpp",
-        ".c",
-        ".cs",
-        ".php",
-        ".rb",
-        ".go",
-        ".rs",
-        ".swift",
-        ".kt",
-        ".scala",
-        ".html",
-        ".css",
-        ".scss",
-        ".sass",
-        ".less",
-        ".vue",
-        ".svelte",
-        ".md",
-        ".txt",
-        ".json",
-        ".xml",
-        ".yaml",
-        ".yml",
-        ".toml",
-        ".ini",
-        ".cfg",
-        ".conf",
-        ".sh",
-        ".bash",
-        ".zsh",
-        ".ps1",
-        ".psm1",
-        ".sql",
-        ".pl",
-        ".pyx",
-        ".r",
-        ".dart",
-        ".lua",
-        ".groovy",
-        ".kotlin",
-        ".h",
-        ".hpp",
-        ".cxx",
-        ".m",
-        ".t",
-        ".swift",
-        ".pl",
-        ".pm"
+        ".py", ".js", ".ts", ".jsx", ".tsx", 
+        ".java", ".cpp", ".go", ".rs", ".php"
     ]
 }
 ```
 
-### Modifying Configuration
+### 🔧 Customization
 
-Feel free to tweak the configuration file to your liking. For instance, to change the backend URL, just edit the `backend_url` field in the `config.json` file.
+Edit the configuration file to customize DocMint's behavior:
 
-## API Documentation 📒
-
-DocMint CLI interacts with a backend server to generate those awesome README files. Here’s a peek at the API endpoints it uses:
-
-### Health Check
-
-- **Endpoint**: `/api/health/`
-- **Method**: `GET`
-- **Description**: Checks if the backend server is reachable.
-- **Response**:
-  - Status Code: `200 OK` if the backend is healthy.
-
-### Generate README from Prompt
-
-- **Endpoint**: `/api/generate/`
-- **Method**: `POST`
-- **Description**: Generates a README file based on a text prompt.
-- **Request Body**:
-
-```json
-{
-  "message": "Your project description here"
-}
+```bash
+# Open configuration file
+nano ~/.docmint/config.json
 ```
 
-- **Response**:
+---
 
-```json
-{
-  "answer": "# Your Generated README Content Here"
-}
-```
+## 🌐 API Integration
 
-### Generate README from Files
+DocMint integrates with cloud services for enhanced README generation:
 
-- **Endpoint**: `/api/generate-from-files/`
-- **Method**: `POST`
-- **Description**: Generates a README file based on the project files.
-- **Request Body**:
-  - `files`: List of project files.
-  - `projectType`: Type of the project (e.g., "Python", "JavaScript").
-  - `contribution`: Boolean indicating whether to include a contributing section.
+### 🔗 Available Endpoints
 
-- **Example Request (using `requests` library)**:
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/health/` | GET | Health check |
+| `/api/generate/` | POST | Generate from prompt |
+| `/api/generate-from-files/` | POST | Generate from files |
+
+### 📡 Example API Usage
 
 ```python
 import requests
 
-url = "https://docmint.onrender.com/api/generate-from-files/"
-files = [
-    ('files', ('file1.py', open('file1.py', 'rb'), 'text/plain')),
-    ('files', ('file2.js', open('file2.js', 'rb'), 'text/javascript'))
-]
-data = {
-    'projectType': 'Python',
-    'contribution': 'true'
-}
+# Generate README from prompt
+response = requests.post(
+    "https://docmint.onrender.com/api/generate/",
+    json={"message": "Python web scraping tool"}
+)
 
-response = requests.post(url, files=files, data=data)
-print(response.json())
+readme_content = response.json()["answer"]
 ```
-
-- **Response**:
-
-```json
-{
-  "result": {
-    "answer": "# Your Generated README Content Here"
-  }
-}
-```
-
-## Deployment 🚀
-
-Deployment instructions can vary based on your project's specifics. Here are some general tips:
-
-- **Web Applications**: Deploy to platforms like Netlify, Vercel, or AWS.
-- **Python Packages**: Package your code and upload to PyPI.
-- **Docker Containers**: Containerize your application using Docker and deploy to container orchestration platforms like Kubernetes.
-
-## Contributing 🤝
-
-We'd love for you to contribute to DocMint CLI! Here's how:
-
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Write tests for your changes.
-4.  Submit a pull request.
-
-## License 📄
-
-This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgments 🙏
-
-- Thanks to all the contributors who've helped make DocMint CLI better.
-- Special thanks to the open-source community for the awesome tools and libraries.
-
-## Troubleshooting 💡
-
-### Connection Issues
-
-If you're having trouble connecting to the DocMint backend, check these:
-
-- Verify your internet connection.
-- Make sure the backend URL is correct.
-- Confirm that the DocMint backend is up and running.
-
-### File Encoding Errors
-
-If you run into file encoding errors, try these:
-
-- Ensure your files are encoded in UTF-8.
-- Use the `--encoding` option to specify the file encoding.
-
-### Large Project Issues
-
-For performance issues with large projects:
-
-- Exclude unnecessary directories and files from analysis.
-- Increase the timeout value for API requests.
 
 ---
 
-[![Built with DocMint](https://img.shields.io/badge/Generated%20by-DocMint-red)](https://github.com/kingsleyesisi/DocMint)
+## 🚀 Development
+
+### 🛠️ Setting Up Development Environment
+
+```bash
+# Clone the repository
+git clone https://github.com/kingsleyesisi/docmint.git
+cd docmint
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install development dependencies
+pip install -e .
+pip install -r requirements.txt
+```
+
+### 🧪 Running Tests
+
+```bash
+# Run tests (when available)
+python -m pytest
+
+# Run with coverage
+python -m pytest --cov=docmint
+```
+
+### 📦 Building Package
+
+```bash
+# Build distribution packages
+python -m build
+
+# Upload to PyPI (maintainers only)
+python -m twine upload dist/*
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help make DocMint even better:
+
+### 🎯 Ways to Contribute
+
+- 🐛 **Report Bugs** - Found an issue? Let us know!
+- 💡 **Suggest Features** - Have ideas for improvements?
+- 📝 **Improve Documentation** - Help make our docs clearer
+- 🔧 **Submit Code** - Fix bugs or add new features
+
+### 📋 Contribution Process
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### 📜 Code Style
+
+We use [Black](https://github.com/psf/black) for code formatting:
+
+```bash
+# Format code
+black docmint/
+
+# Check formatting
+black --check docmint/
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues & Solutions
+
+<details>
+<summary><strong>🔌 Connection Issues</strong></summary>
+
+**Problem**: Cannot connect to DocMint backend
+
+**Solutions**:
+- ✅ Check your internet connection
+- ✅ Verify backend URL in configuration
+- ✅ Try using `--url` flag with alternative endpoint
+- ✅ Check firewall settings
+
+</details>
+
+<details>
+<summary><strong>📁 File Encoding Errors</strong></summary>
+
+**Problem**: Encoding errors when reading files
+
+**Solutions**:
+- ✅ Ensure files are UTF-8 encoded
+- ✅ Check for binary files in project directory
+- ✅ Add problematic files to exclusion list
+
+</details>
+
+<details>
+<summary><strong>⚡ Performance Issues</strong></summary>
+
+**Problem**: Slow processing for large projects
+
+**Solutions**:
+- ✅ Exclude unnecessary directories (node_modules, etc.)
+- ✅ Reduce max_files in configuration
+- ✅ Use specific directory targeting with `-d`
+
+</details>
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- 🌟 **Contributors** - Thank you to all who have contributed to this project
+- 🛠️ **Open Source Community** - For the amazing tools and libraries
+- 🤖 **AI Technology** - Powering intelligent documentation generation
+
+---
+
+<div align="center">
+
+### 🌟 Star us on GitHub!
+
+If DocMint helped you create better documentation, please consider giving us a star ⭐
+
+[![GitHub stars](https://img.shields.io/github/stars/kingsleyesisi/docmint.svg?style=social&label=Star)](https://github.com/kingsleyesisi/docmint)
+
+---
+
+**Made with ❤️ by the DocMint Team**
+
+[![Built with DocMint](https://img.shields.io/badge/Generated%20by-DocMint-red?style=flat-square)](https://github.com/kingsleyesisi/docmint)
+
+</div>
