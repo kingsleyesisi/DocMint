@@ -31,6 +31,7 @@
 🌍 **Cross-Platform** - Works seamlessly on Windows, macOS, and Linux  
 ⚡ **Lightning Fast** - Generate comprehensive docs in seconds  
 🛠️ **Highly Configurable** - Customize output to match your needs  
+🚫 **Smart Filtering** - Exclude unwanted files and directories with patterns
 
 ---
 
@@ -80,6 +81,22 @@ docmint -d /path/to/your/project
 docmint -p "My awesome web application built with Flask and React"
 ```
 
+### 🚫 Exclude Files and Directories
+
+```bash
+# Exclude specific directories
+docmint --exclude-dir "temp,cache,logs"
+
+# Exclude specific files (supports wildcards)
+docmint --exclude-file "*.log,*.tmp,secret.txt"
+
+# Exclude with patterns
+docmint --exclude-file "tests/*,docs/*.md"
+
+# Combine multiple exclusions
+docmint --exclude-dir node_modules,dist --exclude-file "*.log,temp*"
+```
+
 ### 🎨 Advanced Usage
 
 ```bash
@@ -94,6 +111,9 @@ docmint --url http://localhost:8000
 
 # Silent mode (no banner)
 docmint --no-banner
+
+# Show current configuration
+docmint --show-config
 ```
 
 ---
@@ -106,10 +126,57 @@ docmint --no-banner
 | `--prompt` | `-p` | Generate from text description | `-p "Flask API server"` |
 | `--type` | `-t` | Specify project type | `-t Python` |
 | `--output` | `-o` | Output filename | `-o DOCUMENTATION.md` |
+| `--exclude-dir` | | Exclude directories (supports wildcards) | `--exclude-dir "temp*,cache"` |
+| `--exclude-file` | | Exclude files (supports wildcards) | `--exclude-file "*.log,secret*"` |
 | `--no-contributing` | | Skip contributing section | `--no-contributing` |
 | `--url` | | Custom backend URL | `--url http://localhost:8000` |
 | `--no-banner` | | Skip banner display | `--no-banner` |
+| `--show-config` | | Show current configuration | `--show-config` |
 | `--help` | `-h` | Show help message | `--help` |
+
+---
+
+## 🚫 Exclusion Patterns
+
+DocMint provides powerful exclusion capabilities to filter out unwanted files and directories:
+
+### 📁 Directory Exclusions
+
+```bash
+# Exclude specific directories
+docmint --exclude-dir "node_modules,dist,build"
+
+# Use wildcards
+docmint --exclude-dir "temp*,cache*,*_backup"
+
+# Multiple exclude-dir arguments
+docmint --exclude-dir node_modules --exclude-dir dist --exclude-dir "temp*"
+```
+
+### 📄 File Exclusions
+
+```bash
+# Exclude specific files
+docmint --exclude-file "secret.txt,config.local.json"
+
+# Use wildcards for file patterns
+docmint --exclude-file "*.log,*.tmp,*.cache"
+
+# Exclude files in specific paths
+docmint --exclude-file "tests/*,docs/*.md,src/temp*"
+```
+
+### 🔧 Default Exclusions
+
+DocMint automatically excludes common directories and files:
+
+**Default Excluded Directories:**
+- `node_modules`, `.git`, `__pycache__`, `venv`, `dist`, `build`
+- `.next`, `target`, `vendor`, `coverage`, `.vs`, `Pods`
+
+**Default Excluded Files:**
+- `*.log`, `*.tmp`, `*.cache`, `*.lock`, `*.pyc`
+- `.DS_Store`, `Thumbs.db`, `*.swp`, `*.swo`
 
 ---
 
@@ -124,6 +191,7 @@ docmint --no-banner
 | 📝 **Professional Templates** | Beautiful, industry-standard README formats |
 | 🌈 **Colorful CLI** | Rich terminal output with progress indicators and status updates |
 | ⚙️ **Configurable** | Extensive configuration options for customized output |
+| 🚫 **Smart Filtering** | Advanced file and directory exclusion with wildcard support |
 | 🔗 **API Integration** | Seamless integration with DocMint cloud services |
 | 📊 **File Analysis** | Comprehensive project file scanning and summarization |
 | 🛡️ **Error Handling** | Robust error handling with helpful diagnostic messages |
@@ -162,7 +230,12 @@ DocMint uses a configuration file located at `~/.docmint/config.json` for persis
     "max_files": 150,
     "excluded_dirs": [
         "node_modules", ".git", "__pycache__", 
-        "venv", "dist", "build", ".next"
+        "venv", "dist", "build", ".next",
+        "coverage", ".vs", "Pods"
+    ],
+    "excluded_files": [
+        "*.log", "*.tmp", "*.cache", "*.lock",
+        ".DS_Store", "Thumbs.db", "*.pyc"
     ],
     "supported_extensions": [
         ".py", ".js", ".ts", ".jsx", ".tsx", 
@@ -176,9 +249,23 @@ DocMint uses a configuration file located at `~/.docmint/config.json` for persis
 Edit the configuration file to customize DocMint's behavior:
 
 ```bash
-# Open configuration file
+# View current configuration
+docmint --show-config
+
+# Open configuration file for editing
 nano ~/.docmint/config.json
 ```
+
+### 📝 Configuration Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `backend_url` | string | API endpoint URL |
+| `max_file_size` | integer | Maximum file size in bytes |
+| `max_files` | integer | Maximum number of files to analyze |
+| `excluded_dirs` | array | Default directories to exclude |
+| `excluded_files` | array | Default file patterns to exclude |
+| `supported_extensions` | array | File extensions to include |
 
 ---
 
@@ -308,7 +395,7 @@ black --check docmint/
 **Solutions**:
 - ✅ Ensure files are UTF-8 encoded
 - ✅ Check for binary files in project directory
-- ✅ Add problematic files to exclusion list
+- ✅ Add problematic files to exclusion list with `--exclude-file`
 
 </details>
 
@@ -318,9 +405,23 @@ black --check docmint/
 **Problem**: Slow processing for large projects
 
 **Solutions**:
-- ✅ Exclude unnecessary directories (node_modules, etc.)
+- ✅ Use `--exclude-dir` to exclude large directories
+- ✅ Use `--exclude-file` to exclude unnecessary files
 - ✅ Reduce max_files in configuration
 - ✅ Use specific directory targeting with `-d`
+
+</details>
+
+<details>
+<summary><strong>🚫 Too Many Files Excluded</strong></summary>
+
+**Problem**: Important files being excluded
+
+**Solutions**:
+- ✅ Check your exclusion patterns with `--show-config`
+- ✅ Use more specific patterns instead of broad wildcards
+- ✅ Review default exclusions in configuration file
+- ✅ Test patterns with smaller directories first
 
 </details>
 

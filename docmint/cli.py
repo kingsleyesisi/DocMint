@@ -11,7 +11,7 @@ import argparse
 import requests
 import time
 from pathlib import Path
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Set
 import mimetypes
 
 # Color codes for terminal output
@@ -59,6 +59,14 @@ class DocMintCLI:
             '.css', '.scss', '.sass', '.less', '.vue', '.svelte', '.md', '.txt',
             '.json', '.xml', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.conf'
         }
+        
+        # Load configuration
+        from .config import get_config
+        self.config = get_config()
+        
+        # Update supported extensions from config
+        if 'supported_extensions' in self.config:
+            self.supported_extensions.update(self.config['supported_extensions'])
     
     def print_banner(self):
         """Print the DocMint CLI banner"""
@@ -122,31 +130,91 @@ class DocMintCLI:
             except requests.exceptions.RequestException:
                 return False
     
-    def get_project_files(self, directory: str, exclude_dirs: Optional[List[str]] = None) -> List[Path]:
+    def parse_exclude_patterns(self, exclude_args: List[str]) -> Set[str]:
+        """Parse exclude arguments into a set of patterns"""
+        exclude_patterns = set()
+        
+        for pattern in exclude_args:
+            # Handle comma-separated values
+            if ',' in pattern:
+                exclude_patterns.update(p.strip() for p in pattern.split(','))
+            else:
+                exclude_patterns.add(pattern.strip())
+        
+        return exclude_patterns
+    
+    def should_exclude_path(self, file_path: Path, exclude_dirs: Set[str], exclude_files: Set[str]) -> bool:
+        """Check if a path should be excluded based on patterns"""
+        path_str = str(file_path)
+        path_parts = file_path.parts
+        
+        # Check directory exclusions
+        for exclude_dir in exclude_dirs:
+            # Exact directory name match
+            if exclude_dir in path_parts:
+                return True
+            # Pattern matching (simple wildcards)
+            if '*' in exclude_dir:
+                import fnmatch
+                if any(fnmatch.fnmatch(part, exclude_dir) for part in path_parts):
+                    return True
+        
+        # Check file exclusions
+        for exclude_file in exclude_files:
+            # Exact filename match
+            if file_path.name == exclude_file:
+                return True
+            # Pattern matching (simple wildcards)
+            if '*' in exclude_file:
+                import fnmatch
+                if fnmatch.fnmatch(file_path.name, exclude_file):
+                    return True
+            # Full path pattern matching
+            if '/' in exclude_file or '\\' in exclude_file:
+                import fnmatch
+                if fnmatch.fnmatch(path_str, exclude_file):
+                    return True
+        
+        return False
+    
+    def get_project_files(self, directory: str, exclude_dirs: Optional[Set[str]] = None, 
+                         exclude_files: Optional[Set[str]] = None) -> List[Path]:
         """Get all supported project files from the directory"""
         if exclude_dirs is None:
-            exclude_dirs = [
+            exclude_dirs = set(self.config.get('excluded_dirs', [
                 'node_modules', '.git', '__pycache__', '.pytest_cache',
                 'venv', 'env', '.env', 'dist', 'build', '.next',
                 'target', 'bin', 'obj', '.gradle', 'vendor'
-            ]
+            ]))
+        
+        if exclude_files is None:
+            exclude_files = set()
         
         files = []
         directory_path = Path(directory)
+        excluded_count = 0
         
         for file_path in directory_path.rglob('*'):
             if file_path.is_file():
-                # Skip files in excluded directories
-                if any(excluded_dir in file_path.parts for excluded_dir in exclude_dirs):
+                # Check if file should be excluded
+                if self.should_exclude_path(file_path, exclude_dirs, exclude_files):
+                    excluded_count += 1
                     continue
                 
                 # Check if file extension is supported
                 if file_path.suffix.lower() in self.supported_extensions:
-                    # Skip very large files (>1MB)
-                    if file_path.stat().st_size < 1024 * 1024:
+                    # Skip very large files (>1MB by default)
+                    max_size = self.config.get('max_file_size', 1024 * 1024)
+                    if file_path.stat().st_size < max_size:
                         files.append(file_path)
         
-        return files[:20]  # Limit to 20 files to avoid overwhelming the API
+        # Show exclusion summary
+        if excluded_count > 0:
+            self.print_info(f"Excluded {excluded_count} files/directories based on patterns")
+        
+        # Limit files based on config
+        max_files = self.config.get('max_files', 20)
+        return files[:max_files]
     
     def detect_project_type(self, files: List[Path]) -> str:
         """Detect the project type based on files"""
@@ -311,7 +379,18 @@ Examples:
   {Colors.GREEN}docmint -p "My awesome project"{Colors.END}  # Generate from text prompt
   {Colors.GREEN}docmint -t Python -o MyREADME.md{Colors.END}  # Specify project type and output
   {Colors.GREEN}docmint --no-contributing{Colors.END}       # Skip contributing section
+  {Colors.GREEN}docmint --exclude-dir node_modules,dist{Colors.END}  # Exclude specific directories
+  {Colors.GREEN}docmint --exclude-file "*.log,temp*"{Colors.END}     # Exclude specific files
   {Colors.GREEN}docmint --url http://localhost:8000{Colors.END}  # Use local backend
+
+Exclude Patterns:
+  {Colors.CYAN}--exclude-dir{Colors.END}    Exclude directories (supports wildcards)
+  {Colors.CYAN}--exclude-file{Colors.END}   Exclude files (supports wildcards and patterns)
+  
+  Examples:
+    {Colors.YELLOW}--exclude-dir "temp*,cache,logs"{Colors.END}
+    {Colors.YELLOW}--exclude-file "*.log,*.tmp,secret.txt"{Colors.END}
+    {Colors.YELLOW}--exclude-file "tests/*,docs/*.md"{Colors.END}
             """
         )
         
@@ -333,18 +412,35 @@ Examples:
                           action='store_true',
                           help='Skip contributing section in README')
         
-        # parser.add_argument('--url', 
-        #                   default='https://your-django-backend.com',
-        #                   help='Backend URL (default: https://your-django-backend.com)')
-       
+        parser.add_argument('--exclude-dir', 
+                          action='append',
+                          default=[],
+                          help='Exclude directories (can be used multiple times, supports wildcards)')
+        
+        parser.add_argument('--exclude-file', 
+                          action='append',
+                          default=[],
+                          help='Exclude files (can be used multiple times, supports wildcards)')
+        
         parser.add_argument('--url', 
                           default='https://docmint.onrender.com',
                           help='Backend URL (default: https://docmint.onrender.com)')  
+        
         parser.add_argument('--no-banner', 
                           action='store_true',
                           help='Skip the banner display')
         
+        parser.add_argument('--show-config', 
+                          action='store_true',
+                          help='Show current configuration and exit')
+        
         args = parser.parse_args()
+        
+        # Show configuration if requested
+        if args.show_config:
+            self.print_info("Current DocMint Configuration:")
+            print(json.dumps(self.config, indent=2))
+            return 0
         
         # Update base URL
         self.base_url = args.url.rstrip('/')
@@ -352,6 +448,19 @@ Examples:
         # Show banner
         if not args.no_banner:
             self.print_banner()
+        
+        # Parse exclude patterns
+        exclude_dirs = set(self.config.get('excluded_dirs', []))
+        exclude_files = set()
+        
+        if args.exclude_dir:
+            custom_exclude_dirs = self.parse_exclude_patterns(args.exclude_dir)
+            exclude_dirs.update(custom_exclude_dirs)
+            self.print_info(f"Custom excluded directories: {', '.join(custom_exclude_dirs)}")
+        
+        if args.exclude_file:
+            exclude_files = self.parse_exclude_patterns(args.exclude_file)
+            self.print_info(f"Custom excluded files: {', '.join(exclude_files)}")
         
         # Check network connection
         self.print_progress("Checking connection to DocMint backend...")
@@ -381,8 +490,14 @@ Examples:
             
             self.print_info(f"Analyzing project in: {directory}")
             
+            # Show exclusion patterns being used
+            if exclude_dirs:
+                self.print_info(f"Excluding directories: {', '.join(sorted(exclude_dirs))}")
+            if exclude_files:
+                self.print_info(f"Excluding files: {', '.join(sorted(exclude_files))}")
+            
             # Get project files
-            files = self.get_project_files(str(directory))
+            files = self.get_project_files(str(directory), exclude_dirs, exclude_files)
             
             if not files:
                 self.print_warning("No supported code files found in the directory.")
