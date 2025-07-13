@@ -1,21 +1,16 @@
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.conf import settings
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-from django.utils.decorators import method_decorator
-from django.views import View
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 import os
-import tempfile
-import mimetypes
 from pathlib import Path
-from google import genai
 import logging
+
+from google import genai
+from google.genai import types
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -38,10 +33,19 @@ SYSTEM_MESSAGE = {
         "4. Analyze the code structure and provide accurate installation and usage instructions.\n"
         "5. Include relevant badges, emojis, and modern formatting for better visual appeal.\n"
         "6. If it's an API project, provide clear API documentation with example requests/responses.\n"
-        "7. Always include a table of contents for longer READMEs.\n"
+        "7. Include a table of contents for longer READMEs (note for longer projects only).\n"
         "8. Add troubleshooting section for complex projects. (note for complex projects only)"
     )
 }
+
+# tweak generation settings 
+config = types.GenerateContentConfig(
+    temperature=0.7,
+    top_p=0.9,
+    top_k=40,
+)
+
+
 
 def validate_gemini_client():
     """Validate if Gemini client is properly initialized"""
@@ -150,18 +154,27 @@ def generate_readme_content(prompt, files_data=None, project_stats=None):
             enhanced_prompt = prompt
         
         user_message = {"role": "user", "content": enhanced_prompt}
-        
-        response = client.models.generate_content_stream(
+
+        FULL_PROMPT = [json.dumps(SYSTEM_MESSAGE), json.dumps(user_message)]
+
+        # Steraming response 
+        for chunk_response in client.models.generate_content_stream(
             model="gemini-2.0-flash-exp",
-            contents=[json.dumps(SYSTEM_MESSAGE), json.dumps(user_message)]
-        )
+            contents=FULL_PROMPT,
+            config=config,
+        ):
+        # response = client.models.generate_content_stream(
+        #     model="gemini-2.0-flash-exp",
+        #     contents=[json.dumps(SYSTEM_MESSAGE), json.dumps(user_message)]
+        # )
         
-        if hasattr(response, 'text') and response.text:
-            return {"answer": response.text.strip()}
-        else:
-            return {"error": "Empty response from Gemini API"}
+            if chunk_response.text:
+                return {"answer": chunk_response.text.strip()}
+            else:
+                return {"error": "Empty response from Gemini API"}
             
     except Exception as e:
+        print(e)
         logger.error(f"Error generating README: {e}")
         return {"error": f"Failed to generate README: {str(e)}"}
 
@@ -365,7 +378,7 @@ def generate_from_files(request):
         - Analyze the actual code to provide accurate setup instructions
         - If it's an API, include endpoint documentation with examples
         - For web projects, include both development and production setup
-        - Add environment variables section if config files are present
+        - Add environment variables section if config files are present and Env example
         - Include testing instructions if test files are detected
         
         ### Footer:
@@ -510,6 +523,7 @@ def index(request):
                 "generate_from_prompt": "/api/generate/", 
                 "generate_from_files": "/api/generate-from-files/",
                 "supported_formats": "/api/formats/",
-                "validate_project": "/api/validate/"
+                "validate_project": "/api/validate/",
+                'test': '/test/'
             }
         }, status=200)

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'doc'
 ]
 
@@ -192,7 +193,7 @@ X_FRAME_OPTIONS = 'DENY'
 
 # DocMint Specific Settings
 DOCMINT_SETTINGS = {
-    'MAX_FILES_PER_REQUEST': 20,
+    'MAX_FILES_PER_REQUEST': 500,
     'MAX_FILE_SIZE_MB': 1,
     'SUPPORTED_EXTENSIONS': [
         '.py', '.js', '.ts', '.jsx', '.tsx', '.java', '.cpp', '.c', '.cs',
